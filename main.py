@@ -31,24 +31,24 @@ def getItems(items : List[Item]):
     df['country']='co'
     order = df[['identificador','country','ciudad','direccion']]
     order.columns = ['id', 'country', 'city', 'address']
-    NroRegitros = len(request)
+    ciclos = int((len(request)/20)+1)
     inicio = 0
-    fin = 24
+    fin = 20
     i=0
     lista = []
-    while i < NroRegitros:
+    while i < ciclos:
         paquete = order.iloc[inicio:fin,]
         envio =  paquete.to_json(orient='records')
         envio = json.loads(envio)
-        inicio += 25
-        fin += 25
-        i = fin
+        inicio += 20
+        fin += 20
+        i += 1
         r = requests.post(url, data=json.dumps(envio),headers=headers ,auth=HTTPBasicAuth(key,secret))
         dct = json.loads(r.text)
         lista.append(dct)
     
-    #respuesta = jsonable_encoder(lista)
-    return dct
+    respuesta = jsonable_encoder(lista)
+    return respuesta
     
     
   
